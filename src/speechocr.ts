@@ -25,6 +25,7 @@ export default async function Command() {
     });
     ocrText = stdout.trim();
   } catch (error: any) {
+    const message = error instanceof Error ? error.message : String(error);
     await showToast({
       style: Toast.Style.Failure,
       title: "OCR Failed",
@@ -47,12 +48,9 @@ export default async function Command() {
   const audioPath = path.join(os.tmpdir(), "raycast-ocr.aiff");
 
   try {
-    execFileSync(
-      "/usr/bin/env",
-      ["say", "-r", rate.toString(), "-o", audioPath, ocrText],
-      { encoding: "utf8" }
-    );
+    execFileSync("/usr/bin/env", ["say", "-r", rate.toString(), "-o", audioPath, ocrText], { encoding: "utf8" });
   } catch (error: any) {
+    const message = error instanceof Error ? error.message : String(error);
     await showToast({
       style: Toast.Style.Failure,
       title: "TTS Generation Failed",
@@ -76,6 +74,7 @@ export default async function Command() {
       title: `🔊 Speaking at ${rate} wpm`,
     });
   } catch (error: any) {
+    const message = error instanceof Error ? error.message : String(error);
     await showToast({
       style: Toast.Style.Failure,
       title: "Playback Failed",
